@@ -64,7 +64,17 @@ Used when reviewing AI-generated Skills from an Hermes Agent user perspective.
 - File structure identical (SKILL.md + scripts/ + references/)
 - No overlapping Skills (each covers distinct model/provider)
 
-## 5. Scoring Guide
+## 5. API Pattern Coverage
+
+For multi-provider gateways (like CursorAI), verify:
+
+- OpenAI-compatible endpoints documented separately from native format
+- Gemini native (`:generateContent`) vs chat-compatible (`/v1/chat/completions`) not merged
+- Async task endpoints include submit + poll + result (not just submit)
+- Platform-specific auth (Bearer vs query param) documented per-endpoint
+- Model version pinned in examples (e.g., `sora-2`, `veo-3.1-generate-preview`)
+
+## 6. Scoring Guide
 
 | Score | Criteria |
 |-------|----------|

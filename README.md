@@ -62,6 +62,29 @@ skill-name/
     └── endpoint-index.md # All endpoints with method, path, params
 ```
 
+## Supported API Patterns
+
+| Pattern | Examples | Auth |
+|---------|----------|------|
+| OpenAI-compatible | Chat, Image, Audio, Embeddings | `Authorization: Bearer` |
+| Gemini native | generateContent, embedContent | `?key=` query param |
+| Async task | Video, some Image (submit → poll → result) | Varies |
+| Platform-specific | Kling, Replicate, Fal.ai, MINIMAX, VIDU | Bearer token |
+
+## Reference: CursorAI API Gateway Coverage
+
+This workflow was validated against the [CursorAI API Gateway](https://cursorai.apifox.cn/) which aggregates 20+ providers:
+
+- **Chat**: GPT-5.x, Claude 4, Gemini 2.5/3, DeepSeek, Qwen
+- **Responses API**: o3-pro, codex-mini (OpenAI new format)
+- **Image**: GPT Image 1/1.5/2, DALL·E 3, Gemini Image, Grok Image, Midjourney, Ideogram, FLUX, 即梦, 豆包 seedream, 千问, 万向 wan, 腾讯AIGC
+- **Video**: Sora, Veo 3/3.1, Grok, Kling, Luma, Runway, 即梦, 海螺, 豆包 seedance, 通义万象, TC-Vidu, 腾讯AIGC, omni, Fal.ai, Replicate, MINIMAX, VIDU, 阿里pix
+- **Audio**: OpenAI TTS/STT (incl. gpt-4o-mini-tts, gpt-4o-transcribe), Gemini TTS, MINIMAX TTS, VIDU TTS, 通义万象 TTS, 可灵 TTS
+- **Music**: Suno (inspiration, custom, extend, splice modes)
+- **Embeddings**: OpenAI, Gemini
+- **Rerank**: Reranking models
+- **Platforms**: 可灵 Kling (full platform), Replicate, Fal.ai, MINIMAX, VIDU, 阿里 pix
+
 ## Quality Checklist
 
 After generation, verify each Skill against these dimensions:
@@ -85,6 +108,9 @@ Full checklist: [references/quality-checklist.md](references/quality-checklist.m
 | Missing dry-run mode | Add `--dry-run` (default) / `--live` to all scripts |
 | No async polling | Include `poll_task.py` with backoff and terminal states |
 | Placeholder variables | `grep -r "{ENV_VAR}" skills/` after generation |
+| Mixed auth patterns | Document exact auth method per endpoint (Bearer vs query param) |
+| Multiple format variants | Each format needs its own endpoint documentation |
+| Video model version drift | Pin model versions, note update date |
 
 ## Verification
 
@@ -101,6 +127,30 @@ grep -c "Note [0-9]" skills/*/SKILL.md | grep -v ":0$" || echo "No duplicate not
 # Verify all descriptions follow format
 grep -L "Use when" skills/*/SKILL.md || echo "All descriptions correct"
 ```
+
+## Changelog
+
+### v2.0.0 (2026-06)
+- Added Responses API coverage (o3-pro, codex-mini)
+- Added Sora video generation
+- Added 豆包 (seedance, doubao-2.0), 通义万象, TC-Vidu, 腾讯AIGC, omni video
+- Added 即梦, 海螺 (MiniMax) video
+- Added GPT Image 1.5, GPT Image 2, Grok Image
+- Added 即梦绘画, 豆包 seedream, 千问 Qwen-Image, 万向 wan image models
+- Added Replicate aggregation platform (FLUX, Stable Diffusion, Imagen 4, etc.)
+- Added Fal.ai aggregation platform (Veo3, Kling video, Seedream, etc.)
+- Added MINIMAX official (TTS, video, voice clone)
+- Added VIDU official (video, image, audio)
+- Added 阿里 pix platform (video generation)
+- Added 可灵 Kling standalone platform (full feature set)
+- Added Rerank models
+- Added GPT-4o-mini-tts, gpt-4o-transcribe
+- Added DeepSeek OCR, Qwen MT Turbo
+- Documented 5 API patterns (OpenAI-compat, Gemini native, async task, platform-specific, Suno)
+- Added 3 new pitfalls (auth patterns, format variants, version drift)
+
+### v1.0.0
+- Initial release with ChatGPT, Claude, Gemini, Image, Video, Audio, Music, Embeddings
 
 ## Related Skills
 
